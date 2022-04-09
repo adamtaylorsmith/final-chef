@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
-// import { StoreProvider } from '../utils/Store';
+import { StoreProvider } from '../utils/Store';
 // import { SnackbarProvider } from 'notistack';
 // import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 
@@ -14,15 +14,15 @@ function MyApp({
 }) {
   return (
     <CacheProvider value={emotionCache}>
+      <StoreProvider>
       {/* <SnackbarProvider
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <StoreProvider>
           <PayPalScriptProvider deferLoading={true}> */}
             <Component {...pageProps} />
           {/* </PayPalScriptProvider>
-        </StoreProvider>
       </SnackbarProvider> */}
+      </StoreProvider>
     </CacheProvider>
   );
 }
