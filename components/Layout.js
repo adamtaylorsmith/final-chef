@@ -13,12 +13,13 @@ import {
 import Head from 'next/head';
 import NextLink from 'next/link';
 import classes from '../utils/classes';
-import { useContext, useEffect, useState } from 'react';
+import { useContext} from 'react';
 import { Store } from '../utils/Store';
+// import jsCookie from 'js-cookie';
 
 export default function Layout({ title, description, children }) {
-  const { state, dispatch } = useContext(Store);
-  const { darkMode, cart, userInfo } = state;
+  const { state  } = useContext(Store); // dispatch
+  const { darkMode, cart,  } = state; // userInfo
   const theme = createTheme({
     components: {
       MuiLink: {
@@ -59,28 +60,46 @@ export default function Layout({ title, description, children }) {
         <CssBaseline />
         <AppBar position="static" sx={classes.appbar}>
           <Toolbar sx={classes.toolbar}>
+            <Box display="flex" alignItems="center">
+              <NextLink href="/" passHref>
+                <Link>
+                  <Typography sx={classes.brand}>amazona</Typography>
+                </Link>
+              </NextLink>
+            </Box>
+            <Box>
+              <NextLink href="/cart" passHref>
+                <Link>
+                  <Typography component="span">
+                    {cart.cartItems.length > 0 ? (
+                      <Badge
+                        color="secondary"
+                        badgeContent={cart.cartItems.length}
+                      >
+                        Cart
+                      </Badge>
+                    ) : (
+                      'Cart'
+                    )}
+                  </Typography>
+                </Link>
+              </NextLink>
+              {/* {userInfo? (
+                <NextLink href="/profile" passHref>
+                  <Link>
+                    {userInfo.name}
+                  </Link>
+                </NextLink>
+              ) : (
+                <NextLink href="/login" passHref>
+                  <Link>
+                    Login
+                  </Link>
+                </NextLink>
+              )} */}
+            </Box>
+            
 
-            <NextLink href="/" passHref>
-              <Link>
-                <Typography sx={classes.brand}>amazona</Typography>
-              </Link>
-            </NextLink>
-            <NextLink href="/cart" passHref>
-              <Link>
-                <Typography component="span">
-                  {cart.cartItems.length > 0 ? (
-                    <Badge
-                      color="secondary"
-                      badgeContent={cart.cartItems.length}
-                    >
-                      Cart
-                    </Badge>
-                  ) : (
-                    'Cart'
-                  )}
-                </Typography>
-              </Link>
-            </NextLink>
           </Toolbar>
         </AppBar>
         <Container component="main" sx={classes.main}>
