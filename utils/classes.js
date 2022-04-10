@@ -11,11 +11,12 @@ const classes = {
     minHeight: '80vh',
   },
   footer: {
-    marginTop: 1,
+    marginTop: 10,
+    marginBottom: 10,
     textAlign: 'center',
   },
   appbar: {
-    backgroundColor: '#203040',
+    backgroundColor: '#44698e', //
     '& a': {
       color: '#ffffff',
       marginLeft: 1,

@@ -1,5 +1,6 @@
 import {
     Alert,
+    Box,
     Card,
     CircularProgress,
     Grid,
@@ -18,6 +19,7 @@ import NextLink from 'next/link';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import React, { useContext, useEffect, useReducer } from 'react';
+import {PayPalButtons, usePayPalScriptReducer} from '@paypal/react-paypal-js'
 import Layout from '../../components/Layout';
 import classes from '../../utils/classes';
 import { Store } from '../../utils/Store';
@@ -60,6 +62,7 @@ const {
 const router = useRouter();
 const { state } = useContext(Store);
 const { userInfo } = state;
+const [{isPending}, paypalDispatch] = usePayPalScriptReducer()
 
 useEffect(() => {
     if (!userInfo) {
@@ -77,8 +80,30 @@ useEffect(() => {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
     }
     };
-    fetchOrder();
-}, [orderId, router, userInfo]);
+    if (!order._id) {
+        fetchOrder();
+    } else {
+        const loadPaypalScript = async () => {
+            const {data: clientId} = await axios.get('/api/keys/paypal', {
+                headers: {authorization: `Bearer ${userInfo.token}`}
+            })
+            paypalDispatch({
+                type: 'resetOptions',
+                value: {
+                    'client-id': clientId,
+                    currency: 'USD'
+                },
+            })
+            paypalDispatch({
+                type: 'setLoadingStatus',
+                value: 'pending'
+            })
+        };
+        loadPaypalScript()
+    }
+    
+}, [order, orderId, router, userInfo, paypalDispatch]);
+
 return (
     <Layout title={`Order ${orderId}`}>
     <Typography component="h1" variant="h1">
@@ -232,6 +257,21 @@ return (
                     </Grid>
                 </Grid>
                 </ListItem>
+                {!isPaid && (
+                  <ListItem>
+                    {isPending ? (
+                      <CircularProgress />
+                    ) : (
+                      <Box sx={classes.fullWidth}>
+                        <PayPalButtons
+                        //   createOrder={createOrder}
+                        //   onApprove={onApprove}
+                        //   onError={onError}
+                        ></PayPalButtons>
+                      </Box>
+                    )}
+                  </ListItem>
+                )}
             </List>
             </Card>
         </Grid>
