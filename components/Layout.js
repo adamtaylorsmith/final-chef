@@ -81,7 +81,7 @@ export default function Layout({ title, description, children }) {
   return (
     <>
       <Head>
-        <title>{title ? `${title} - Sanity Amazona` : 'Sanity Amazona'}</title>
+        <title>{title ? `${title} - Chef Adam` : 'Chef Adam'}</title>
         {description && <meta name="description" content={description}></meta>}
       </Head>
       <ThemeProvider theme={theme}>
@@ -91,7 +91,7 @@ export default function Layout({ title, description, children }) {
             <Box display="flex" alignItems="center">
               <NextLink href="/" passHref>
                 <Link>
-                  <Typography sx={classes.brand}>amazona</Typography>
+                  <Typography sx={classes.brand}>Chef Adam</Typography>
                 </Link>
               </NextLink>
             </Box>
@@ -104,7 +104,7 @@ export default function Layout({ title, description, children }) {
                         color="secondary"
                         badgeContent={cart.cartItems.length}
                       >
-                        Cart
+                        Cart&nbsp;
                       </Badge>
                     ) : (
                       'Cart'
@@ -140,7 +140,7 @@ export default function Layout({ title, description, children }) {
               ) : (
                 <NextLink href="/login" passHref>
                   <Link>
-                    Login
+                    &nbsp;Login
                   </Link>
                 </NextLink>
               )}
@@ -152,7 +152,7 @@ export default function Layout({ title, description, children }) {
           {children}
         </Container>
         <Box component="footer" sx={classes.footer}>
-          <Typography>All rights reserved. Sanity Amazona.</Typography>
+          <Typography>All rights reserved. Chef Adam Taylor 2022.</Typography>
         </Box>
       </ThemeProvider>
     </>
