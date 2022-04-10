@@ -13,13 +13,13 @@ export default function RegisterScreen() {
     const { state, dispatch } = useContext(Store);
     const { userInfo } = state;
     const router = useRouter();
-    const { redirect } = router.query;
+    // const { redirect } = router.query;
 
     useEffect(() => {
         if (userInfo) {
-        router.push(redirect || '/');
+        router.push('/');
         }
-    }, [router, userInfo, redirect]);
+    }, [router, userInfo]);
 
     const {
         handleSubmit,
@@ -39,9 +39,9 @@ export default function RegisterScreen() {
           });
           dispatch({ type: 'USER_LOGIN', payload: data });
           jsCookie.set('userInfo', JSON.stringify(data));
-          router.push(redirect || '/');
+          router.push('/');
         } catch (err) {
-            alert('ERROR')
+            alert('REGISTRATION ERROR')
         //   enqueueSnackbar(getError(err), { variant: 'error' });
         }
     };
@@ -82,7 +82,10 @@ export default function RegisterScreen() {
                             name="email"
                             control={control}
                             defaultValue=""
-                            rules={{required: true}}
+                            rules={{
+                                required: true, 
+                                pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                            }}
                             render={ ({field}) => (
                                 <TextField variant="outlined" 
                                     fullWidth id="email" 

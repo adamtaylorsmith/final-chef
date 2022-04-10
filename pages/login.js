@@ -1,20 +1,43 @@
-import React from 'react'
+import React, {useEffect, useContext} from 'react'
 import Layout from '../components/Layout'
 import { useForm, Controller } from 'react-hook-form'
 import Form from '../components/Form'
 import NextLink from 'next/link'
 import { TextField, Typography, List, ListItem, Button, Link } from '@mui/material';
+import axios from 'axios'
+import jsCookie from 'js-cookie'
+import { useRouter } from 'next/router';
+import { Store } from '../utils/Store'
 
 export default function LoginScreen() {
+    const { state, dispatch } = useContext(Store);
+    const { userInfo } = state;
+    const router = useRouter();
+    useEffect(() => {
+        if (userInfo) {
+        router.push('/');
+        }
+    }, [router, userInfo]);
     const {
         handleSubmit,
         control,
         formState: {errors},
     } = useForm();
 
-    const submitHandler = async (email, password) => {
-
-    }
+    const submitHandler = async ({ email, password }) => {
+        try {
+          const { data } = await axios.post('/api/users/login', {
+            email,
+            password,
+          });
+          dispatch({ type: 'USER_LOGIN', payload: data });
+          jsCookie.set('userInfo', JSON.stringify(data));
+          router.push('/');
+        } catch (err) {
+            alert('Error no login sorry')
+        //   enqueueSnackbar(err.message, { variant: 'error' });
+        }
+      };
 
     return (
         <Layout title="Login">
@@ -28,7 +51,10 @@ export default function LoginScreen() {
                             name="email"
                             control={control}
                             defaultValue=""
-                            rules={{required: true}}
+                            rules={{
+                                required: true, 
+                                pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                            }}
                             render={ ({field}) => (
                                 <TextField variant="outlined" 
                                     fullWidth id="email" 
@@ -52,7 +78,10 @@ export default function LoginScreen() {
                             name="password"
                             control={control}
                             defaultValue=""
-                            rules={{required: true, minLength: 6}}
+                            rules={{
+                                required: true, 
+                                minLength: 6
+                            }}
                             render={ ({field}) => (
                                 <TextField variant="outlined" 
                                     fullWidth id="password" 
