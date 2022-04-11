@@ -41,7 +41,7 @@ function PlaceOrderScreen() {
   const itemsPrice = round2(
     cartItems.reduce((a, c) => a + c.price * c.quantity, 0)
   );
-  const shippingPrice = itemsPrice > 200 ? 0 : 15;
+  const shippingPrice = itemsPrice > 200 ? 0 : 0;
   const taxPrice = round2(itemsPrice * 0.15);
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
 
@@ -131,7 +131,7 @@ function PlaceOrderScreen() {
               <ListItem>
                 <Button
                   onClick={() => router.push('/payment')}
-                  variant="contianed"
+                  variant="contained"
                   color="secondary"
                 >
                   Edit
